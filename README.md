@@ -109,6 +109,101 @@ claude --plugin-dir ./context-reframing
 
 ---
 
+## Quick Start: What to Do After Installing / 설치 후 바로 시작하기
+
+**Don't know where to start?** Just paste one of these into Claude Code.
+
+**어디서 시작할지 모르겠다면?** 아래 중 하나를 Claude Code에 붙여넣으세요.
+
+### Option 1: Get Personalized Recommendations / 맞춤 추천 받기 (Recommended)
+
+Paste this into Claude Code and it will analyze your project, then suggest exactly how to use each skill:
+
+이것을 Claude Code에 붙여넣으면 프로젝트를 분석한 후 각 스킬 활용법을 제안해줍니다:
+
+```
+Analyze this project and suggest how I can use the 4 context-reframing skills
+(context-reframing, product-reframing, debug-reframing, prompt-reframing).
+
+For each skill, tell me:
+1. A specific situation in THIS project where it would help
+2. An example prompt I can copy-paste to try it right now
+
+Look at recent git history, open issues, TODOs, and code structure to find
+real opportunities — not generic examples.
+```
+
+```
+이 프로젝트를 분석해서 context-reframing의 4개 스킬
+(context-reframing, product-reframing, debug-reframing, prompt-reframing)을
+각각 어떻게 활용하면 좋을지 제안해줘.
+
+각 스킬별로:
+1. 이 프로젝트에서 도움이 될 구체적인 상황
+2. 지금 바로 써볼 수 있는 예시 프롬프트
+
+최근 git 히스토리, 이슈, TODO, 코드 구조를 보고
+실제 활용 기회를 찾아줘 — 일반적인 예시 말고.
+```
+
+### Option 2: Try It Now / 지금 바로 써보기
+
+Copy-paste any of these to experience each skill immediately:
+
+각 스킬을 바로 체험하려면 아래를 복사해서 붙여넣으세요:
+
+**Product Reframing** — When you have a feature request:
+```
+/product-reframing
+Users are asking for a dark mode. Should we build it?
+```
+```
+/product-reframing
+유저들이 다크모드를 요청하고 있어. 만들어야 할까?
+```
+
+**Debug Reframing** — When a bug keeps coming back:
+```
+/debug-reframing
+This API timeout error keeps recurring. We've added retry logic twice already.
+```
+```
+/debug-reframing
+이 API 타임아웃 에러가 계속 재발해. 이미 retry 로직을 두 번이나 추가했는데.
+```
+
+**Prompt Reframing** — When you catch yourself being vague:
+```
+/prompt-reframing
+Refactor the auth module
+```
+```
+/prompt-reframing
+인증 모듈 리팩토링해줘
+```
+
+**Passive Mode** — Set it once, forget it. Auto-catches vague requests:
+```
+/prompt-reframing --passive
+```
+
+### Option 3: The Universal Skill / 범용 스킬
+
+For any situation where you suspect the stated problem isn't the real one:
+
+표면적 문제가 진짜 문제가 아닌 것 같을 때:
+
+```
+/context-reframing
+Our CEO wants us to "add AI to the product". What should we actually build?
+```
+```
+/context-reframing
+CEO가 "제품에 AI를 넣으라"고 했는데. 실제로 뭘 만들어야 하지?
+```
+
+---
+
 ## The Voice→Need→Context Framework
 
 Every request has three layers. Most people only communicate the first one.
