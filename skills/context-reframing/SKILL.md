@@ -39,6 +39,16 @@ Do NOT propose solutions until Surface Risk drops below 20%. Solving the wrong p
 
 ## Execution Flow
 
+### Phase 0: Load Interactive Tool
+
+Before anything else, fetch the `AskUserQuestion` tool so you can use it for interactive questions:
+
+```
+ToolSearch(query: "select:AskUserQuestion", max_results: 1)
+```
+
+This is a deferred tool that must be loaded before you can call it. If `ToolSearch` is not available or `AskUserQuestion` cannot be loaded, fall back to plain text questions with (A)/(B)/(C) options. But always try to load it first — the clickable UI is a significantly better experience.
+
 ### Phase 1: Initialize
 
 1. **Detect project type**: brownfield (existing code) or greenfield
@@ -62,26 +72,15 @@ Identify which of the 4 scoring dimensions has the lowest score. Generate ONE qu
 
 See [references/question-patterns.md](references/question-patterns.md) for templates by phase and dimension.
 
-**Step B — Ask the question via AskUserQuestion**
+**Step B — Ask the question (TOOL CALL, not text)**
 
-You MUST use the `AskUserQuestion` tool for every question. Never print questions as plain text — always provide clickable options. This is what makes the interview feel like a guided conversation instead of a wall of text.
+Call the `AskUserQuestion` tool (loaded in Phase 0) for every question. This is an actual tool invocation — not text formatting. The tool renders clickable buttons the user can tap, which is far better than printing (A)/(B)/(C) as text.
 
-```
-AskUserQuestion(
-  question: "Round {n} | Targeting: {weakest_dimension} | Surface Risk: {score}%\n\n{your question}",
-  options: [
-    "{hypothesis-based option A}",
-    "{hypothesis-based option B}",
-    "{hypothesis-based option C}",
-    "다른 상황이에요 (직접 설명할게요)"
-  ]
-)
-```
+Call it with these parameters:
+- `question`: `"Round {n} | Targeting: {weakest_dimension} | Surface Risk: {score}%\n\n{your question}"`
+- `options`: an array of 3-5 hypothesis-based choices, with the last one always being a free-text escape like "다른 상황이에요 (직접 설명할게요)" or "Something else"
 
-Rules for options:
-- 3-5 contextually specific options based on your hypothesis about the answer
-- Last option is always a free-text escape hatch ("다른 상황이에요" / "Something else")
-- Options should be specific, not generic ("좋아요"/"나빠요" is useless)
+If `AskUserQuestion` was not loaded in Phase 0 (tool unavailable), fall back to plain text with lettered options.
 
 **Step C — Score all 4 dimensions**
 
