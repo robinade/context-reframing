@@ -1,0 +1,22 @@
+{
+  "name": "context-reframing",
+  "description": "Voice→Need→Context reframing skill family. Transforms surface-level requests into deep contextual understanding before proposing solutions. Includes 4 domain-specific variants: universal, product, debug, and prompt reframing.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Q00"
+  },
+  "homepage": "https://github.com/Q00/context-reframing",
+  "repository": "https://github.com/Q00/context-reframing",
+  "license": "MIT",
+  "keywords": [
+    "reframing",
+    "context",
+    "problem-solving",
+    "root-cause",
+    "product",
+    "debugging",
+    "prompt",
+    "voice-need-context",
+    "skills"
+  ]
+}
