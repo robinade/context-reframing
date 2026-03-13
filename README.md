@@ -121,7 +121,7 @@ Every request has three layers. Most people only communicate the first one.
 
 ### Real-World Examples / 실전 예시
 
-**Example 1: Product Feature Request / 제품 기능 요청**
+**Example 1: The Feature Request Trap / 기능 요청의 함정**
 
 ```
 Voice:   "Add 10 more search filters"
@@ -131,11 +131,11 @@ Need:    Users can't find what they're looking for
          유저가 원하는 것을 찾지 못하고 있다
 
 Context: The search algorithm itself is inaccurate,
-         so users try to compensate with filters
-         검색 알고리즘 자체가 부정확해서 필터로 보완하려는 것
+         so users try to compensate with manual filters
+         검색 알고리즘 자체가 부정확해서 수동 필터로 보완하려는 것
 ```
 
-**Example 2: Recurring Bug / 반복되는 버그**
+**Example 2: The Bug That Won't Stay Fixed / 고쳐도 고쳐도 재발하는 버그**
 
 ```
 Voice:   "Login keeps failing — third time this quarter"
@@ -144,28 +144,140 @@ Voice:   "Login keeps failing — third time this quarter"
 Need:    Session tokens are expiring unexpectedly
          세션 토큰이 예기치 않게 만료됨
 
-Context: Token refresh logic silently swallows network errors,
+Context: Token refresh logic silently swallows network errors —
          a design flaw that no amount of retry logic will fix
-         토큰 갱신 로직이 네트워크 에러를 무시하는 설계 결함
+         토큰 갱신 로직이 네트워크 에러를 무시하는 설계 결함 —
+         retry를 아무리 추가해도 해결 불가
 ```
 
-**Example 3: Vague AI Prompt / 모호한 AI 프롬프트**
+**Example 3: The Slow App Illusion / "앱이 느리다"의 착각**
 
 ```
-Voice:   "Refactor this code"
-         "이 코드 리팩토링해줘"
+Voice:   "The app is too slow, optimize it"
+         "앱이 너무 느려요, 최적화해주세요"
 
-Need:    Could mean: readability? performance? extensibility?
-         가독성? 성능? 확장성? — 무엇이든 될 수 있음
+Need:    Users perceive a 5-second delay on the main page
+         유저가 메인 페이지에서 5초의 지연을 체감
 
-Context: New team member is joining next week and
-         can't understand the current codebase
-         다음 주에 새 팀원이 합류하는데 현재 코드를 이해 못 하는 상황
+Context: The page actually loads in 200ms, but an API call takes 4s
+         with no loading indicator — users think the app is frozen,
+         not loading. The fix is a skeleton loader, not optimization.
+         페이지는 실제로 200ms에 로드되지만, API 호출이 4초 걸리는데
+         로딩 표시가 없음 — 유저는 앱이 멈춘 줄 알지, 로딩 중인 줄 모름.
+         해결책은 최적화가 아니라 스켈레톤 로더.
 ```
 
-Without context, you might optimize for performance when the real need is readability for onboarding.
+**Example 4: The Dashboard Nobody Needs / 아무도 안 쓸 대시보드**
 
-맥락 없이는 실제 필요가 온보딩을 위한 가독성인데 성능 최적화를 할 수도 있습니다.
+```
+Voice:   "We need a real-time analytics dashboard"
+         "실시간 분석 대시보드 만들어주세요"
+
+Need:    Stakeholder wants to track campaign performance
+         이해관계자가 캠페인 성과를 추적하고 싶어 함
+
+Context: Board meeting is next Thursday. The CEO needs to answer
+         one question: "Is the new campaign working?" — they don't
+         need a dashboard, they need 3 numbers on one page.
+         다음 주 목요일 이사회. CEO가 답해야 할 질문은 딱 하나:
+         "새 캠페인이 효과가 있는가?" — 대시보드가 아니라
+         한 페이지에 숫자 3개면 된다.
+```
+
+### What Changes: With vs Without This Skill / 스킬 사용 전후 비교
+
+Here's the real impact — what happens when you just execute the Voice vs when you dig to Context:
+
+실제 임팩트입니다 — Voice를 그대로 실행했을 때 vs Context를 파고들었을 때:
+
+```
+Example 1: "Add 10 search filters"
+┌─ Without (Voice 그대로) ──────────┬─ With Context Reframing ──────────┐
+│ Build: 10 filter dropdowns        │ Discover: Search algo is broken   │
+│ 만듦: 필터 드롭다운 10개            │ 발견: 검색 알고리즘이 부정확        │
+│                                   │                                   │
+│ Time: 2 sprints                   │ Build: Better search + 3 filters  │
+│ 소요: 2 스프린트                    │ 만듦: 검색 개선 + 핵심 필터 3개     │
+│                                   │                                   │
+│ Result: More UI clutter,          │ Time: 1 sprint                    │
+│         users still can't find    │ 소요: 1 스프린트                    │
+│ 결과: UI만 복잡해지고               │                                   │
+│       여전히 못 찾음                │ Result: Users find items in 2     │
+│                                   │         clicks. Complaints stop.  │
+│ ❌ Problem persists               │ 결과: 2번 클릭으로 상품 발견.       │
+│                                   │       불만 종료.                   │
+│                                   │ ✅ Problem eliminated             │
+└───────────────────────────────────┴───────────────────────────────────┘
+```
+
+```
+Example 2: "Login keeps failing"
+┌─ Without (Voice 그대로) ──────────┬─ With Context Reframing ──────────┐
+│ Fix: Add retry logic (again)      │ Discover: Design flaw in token    │
+│ 수정: retry 로직 추가 (또)          │          refresh error handling   │
+│                                   │ 발견: 토큰 갱신 에러 처리 설계 결함  │
+│ Time: 2 hours                     │                                   │
+│ 소요: 2시간                        │ Fix: Offline-tolerant auth arch   │
+│                                   │ 수정: 오프라인 내성 인증 아키텍처    │
+│ Result: Works for 2 weeks,        │                                   │
+│         then breaks again         │ Time: 2 days                      │
+│ 결과: 2주간 작동 후 재발            │ 소요: 2일                          │
+│                                   │                                   │
+│ ❌ 4th fix incoming next quarter  │ Result: Never recurs              │
+│ ❌ 다음 분기에 4번째 수정 예정      │ 결과: 다시는 재발하지 않음          │
+│                                   │ ✅ Permanently solved             │
+└───────────────────────────────────┴───────────────────────────────────┘
+```
+
+```
+Example 3: "App is too slow"
+┌─ Without (Voice 그대로) ──────────┬─ With Context Reframing ──────────┐
+│ Do: Profile app, optimize         │ Discover: Page loads in 200ms,    │
+│     queries, add caching          │   but no loading state for 4s     │
+│ 행동: 프로파일링, 쿼리 최적화,      │         API call                  │
+│       캐싱 추가                    │ 발견: 페이지는 200ms인데 4초짜리   │
+│                                   │       API 호출에 로딩 표시 없음     │
+│ Time: 1-2 weeks                   │                                   │
+│ 소요: 1-2주                        │ Fix: Add skeleton loader          │
+│                                   │ 수정: 스켈레톤 로더 추가            │
+│ Result: 10% faster (was already   │                                   │
+│         fast). Users still        │ Time: 2 hours                     │
+│         complain "it's slow"      │ 소요: 2시간                        │
+│ 결과: 10% 빨라짐 (원래도 빨랐음).   │                                   │
+│       유저 여전히 "느리다" 불만      │ Result: "Wow, so much faster!"    │
+│                                   │ 결과: "와, 엄청 빨라졌어요!"        │
+│ ❌ Weeks wasted optimizing        │                                   │
+│    nothing                        │ ✅ Solved in an afternoon          │
+└───────────────────────────────────┴───────────────────────────────────┘
+```
+
+```
+Example 4: "Build a dashboard"
+┌─ Without (Voice 그대로) ──────────┬─ With Context Reframing ──────────┐
+│ Build: Full analytics dashboard   │ Discover: CEO needs to answer     │
+│   with charts, filters, exports   │   one question for Thursday's     │
+│ 만듦: 차트, 필터, 내보내기 포함     │   board meeting                   │
+│       풀 분석 대시보드              │ 발견: CEO는 목요일 이사회에서       │
+│                                   │       질문 하나에 답하면 됨         │
+│ Time: 3-4 weeks                   │                                   │
+│ 소요: 3-4주                        │ Build: One-page report, 3 KPIs   │
+│                                   │ 만듦: 원페이지 리포트, KPI 3개      │
+│ Result: Delivered after the       │                                   │
+│   board meeting. Nobody uses it.  │ Time: 1 day                       │
+│ 결과: 이사회 끝나고 나서 완성.      │ 소요: 1일                          │
+│       아무도 안 씀.                │                                   │
+│                                   │ Result: CEO nails the meeting.    │
+│ ❌ 4 weeks wasted                 │   Dashboard built later — if      │
+│                                   │   actually needed.                │
+│                                   │ 결과: CEO 이사회 완벽 대응.         │
+│                                   │   대시보드는 나중에 — 진짜 필요하면.│
+│                                   │ ✅ Right thing at the right time  │
+└───────────────────────────────────┴───────────────────────────────────┘
+```
+
+The pattern is always the same: **without context, you build more and solve less.**
+
+패턴은 항상 동일합니다: **맥락 없이는 더 많이 만들고, 더 적게 해결합니다.**
 
 ---
 
