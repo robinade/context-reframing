@@ -1,7 +1,7 @@
 {
   "name": "context-reframing",
   "description": "Voice→Need→Context reframing skill family. Transforms surface-level requests into deep contextual understanding before proposing solutions. Includes 4 domain-specific variants: universal, product, debug, and prompt reframing.",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "author": {
     "name": "robinade"
   },

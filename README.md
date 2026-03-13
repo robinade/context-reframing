@@ -345,6 +345,34 @@ This plugin includes 4 domain-specific reframing skills, each with tuned weights
 
 ## How It Works / 작동 방식
 
+### AskUserQuestion Enforcement (v2.0) / AskUserQuestion 강제 (v2.0)
+
+**Every question in the reframing loop MUST use the `AskUserQuestion` tool.** This is the single most important design decision in v2.0.
+
+**리프레이밍 루프의 모든 질문은 반드시 `AskUserQuestion` 도구를 사용해야 합니다.** 이것이 v2.0의 가장 중요한 설계 결정입니다.
+
+Why? Without explicit tool invocation, Claude tends to:
+1. Output questions as plain text (which doesn't block execution)
+2. Simulate likely user answers instead of waiting for real ones
+3. Run the entire multi-round conversation in a single response
+
+왜? 명시적 도구 호출 없이는 Claude가:
+1. 질문을 일반 텍스트로 출력 (실행을 차단하지 않음)
+2. 실제 답변을 기다리지 않고 예상 답변을 시뮬레이션
+3. 전체 다중 라운드 대화를 한 번의 응답으로 실행
+
+v2.0 enforces this through multiple reinforcement layers inspired by [Superpowers](https://github.com/obra/superpowers):
+
+v2.0은 [Superpowers](https://github.com/obra/superpowers)에서 영감받은 다중 강화 레이어를 통해 이를 강제합니다:
+
+| Layer | Pattern | Purpose |
+|-------|---------|---------|
+| **Iron Law** | `NO SOLUTIONS WITHOUT CONTEXT DEPTH FIRST` | Absolute rule in code block |
+| **`<EXTREMELY-IMPORTANT>`** | "You MUST use AskUserQuestion... not negotiable" | Authority + scarcity |
+| **`<HARD-GATE>`** | "NEVER simulate or fabricate user answers" | Anti-simulation guard |
+| **Red Flags Table** | Maps every rationalization to its counter | Preemptive anti-skip |
+| **Explicit tool format** | `AskUserQuestion(question="...")` shown in-context | Removes ambiguity |
+
 ### The Hard Gate / 하드 게이트
 
 **No solution is proposed until Surface Risk ≤ 20%.**
