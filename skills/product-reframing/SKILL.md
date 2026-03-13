@@ -76,15 +76,19 @@ Save to `.omc/reframes/product-{slug}.md`
 
 ## Execution Bridge (Product-Specific)
 
-```
-Reframing complete (Surface Risk: {r}%)
+Present next steps via `AskUserQuestion`:
 
-Next step:
-  [1] Deep Interview → Define product spec from this problem
-  [2] Brainstorming → Design the product solution
-  [3] PRD → Write a Product Requirements Document
-  [4] Export → Save report and exit
-  [5] Dig Deeper → Continue exploring Context
+```
+AskUserQuestion(
+  question: "Reframing complete (Surface Risk: {r}%). How would you like to proceed?",
+  options: [
+    "Deep Interview → Define product spec from this problem",
+    "Brainstorming → Design the product solution",
+    "PRD → Write a Product Requirements Document",
+    "Export → Save report and exit",
+    "Dig Deeper → Continue exploring Context"
+  ]
+)
 ```
 
 ## All Other Behavior

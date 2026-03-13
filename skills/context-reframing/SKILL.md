@@ -62,13 +62,9 @@ Identify which of the 4 scoring dimensions has the lowest score. Generate ONE qu
 
 See [references/question-patterns.md](references/question-patterns.md) for templates by phase and dimension.
 
-**Step B — Ask the question**
+**Step B — Ask the question via AskUserQuestion**
 
-```
-Round {n} | Targeting: {weakest_dimension} | Surface Risk: {score}%
-
-{question}
-```
+Use `AskUserQuestion` with contextually relevant clickable options (see "Interactive Questions" section below). Always include a free-text escape option.
 
 **Step C — Score all 4 dimensions**
 
@@ -155,14 +151,18 @@ Save report to `.omc/reframes/general-{slug}.md`.
 
 ### Phase 5: Execution Bridge
 
-```
-Reframing complete (Surface Risk: {r}%)
+Present next steps via `AskUserQuestion`:
 
-Next step:
-  [1] Deep Interview → Define spec from this problem
-  [2] Brainstorming → Jump to solution design
-  [3] Export → Save report and exit
-  [4] Dig Deeper → Continue exploring Context
+```
+AskUserQuestion(
+  question: "Reframing complete (Surface Risk: {r}%). How would you like to proceed?",
+  options: [
+    "Deep Interview → Define spec from this problem",
+    "Brainstorming → Jump to solution design",
+    "Export → Save report and exit",
+    "Dig Deeper → Continue exploring Context"
+  ]
+)
 ```
 
 ## Context Depth Score (CDS)
@@ -177,11 +177,47 @@ Surface Risk = 1 - (voice × w_v + need × w_n + context × w_c + reframe × w_r
 
 Domain skills override these weights. See [references/scoring-engine.md](references/scoring-engine.md) for full rubrics and domain weight profiles.
 
+## Interactive Questions with AskUserQuestion
+
+Every question in the reframing loop MUST use the `AskUserQuestion` tool — never just print questions as plain text. This provides a clickable UI that makes the interview feel like a guided conversation, not a wall of text.
+
+**Why this matters:** Plain-text questions with (A)/(B)/(C) options require the user to type their choice. `AskUserQuestion` gives them clickable buttons, reducing friction and making the experience feel polished. Users engage more deeply when interaction is effortless.
+
+**How to format each question:**
+
+```
+AskUserQuestion(
+  question: "Round {n} | Targeting: {weakest_dimension} | Surface Risk: {score}%\n\n{your question}",
+  options: [
+    "Option A description",
+    "Option B description",
+    "Option C description",
+    "다른 상황이에요 (직접 설명할게요)"   // Always include a free-text escape hatch
+  ]
+)
+```
+
+**Rules:**
+- Provide 3-5 contextually relevant options based on your hypothesis about the answer
+- Always include one open-ended option ("다른 상황이에요" / "Something else") as the last choice so users aren't forced into your framing
+- Options should be specific enough to be useful, not generic ("좋아요" / "나빠요")
+- After scoring, display the CDS table as a normal text message (not inside AskUserQuestion)
+- The Execution Bridge (Phase 5) also uses `AskUserQuestion` with the next-step options
+
+**The early exit and hard cap prompts** should also use `AskUserQuestion`:
+```
+AskUserQuestion(
+  question: "10 rounds reached. Surface Risk: {r}%. Continue or proceed?",
+  options: ["계속 질문받기", "이 정도면 충분해요, 진행하죠", "리포트만 저장하고 끝낼게요"]
+)
+```
+
 ## Common Rules
 
 | Rule | Detail |
 |------|--------|
 | One question at a time | Never batch multiple questions |
+| Use AskUserQuestion | Every interview question uses AskUserQuestion with clickable options |
 | Score every round | Display CDS transparently after each answer |
 | Gather facts first | Explore codebase BEFORE asking user about it |
 | Early exit | Round 3+, with Surface Risk warning |

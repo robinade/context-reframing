@@ -2,8 +2,8 @@
   "name": "context-reframing",
   "description": "Voice→Need→Context reframing skill family for Claude Code",
   "owner": {
-    "name": "Q00",
-    "url": "https://github.com/Q00"
+    "name": "robinade",
+    "url": "https://github.com/robinade"
   },
   "plugins": [
     {

@@ -40,18 +40,28 @@ All dimensions weighted equally at 25%. AI conversations need balanced clarity �
 - "이 작업의 긴급도와 중요도는?"
 - "팀 내에서 이 작업의 목적은?"
 
-## Output: Inline Confirmation
+## Output: Inline Confirmation via AskUserQuestion
 
-Prompt reframing is lightweight. Instead of generating a report file, show an inline confirmation:
+Prompt reframing is lightweight. Instead of generating a report file, confirm your understanding interactively:
 
+First, display the reframed understanding as text:
 ```
 I understood your context as:
   Said:      "리팩토링해줘"
   Intent:    코드 가독성 향상
   Situation: 새 팀원 온보딩이 느려서 코드를 이해하기 쉽게 만들려는 것
+```
 
-  Is this right?
-  [Yes] [No, actually...] [Partially]
+Then immediately use `AskUserQuestion` to confirm:
+```
+AskUserQuestion(
+  question: "Is this understanding correct?",
+  options: [
+    "Yes, that's exactly right — proceed",
+    "Partially right, let me clarify...",
+    "No, that's not what I meant"
+  ]
+)
 ```
 
 Then proceed directly with the reframed understanding. No file saved.

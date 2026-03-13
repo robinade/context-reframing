@@ -89,15 +89,19 @@ Save to `.omc/reframes/debug-{slug}.md`
 
 ## Execution Bridge (Debug-Specific)
 
-```
-Reframing complete (Surface Risk: {r}%)
+Present next steps via `AskUserQuestion`:
 
-Next step:
-  [1] Systematic Debugging → Apply reframed understanding
-  [2] Direct Fix → Implement the Context-level solution
-  [3] Architecture Review → Evaluate design flaw scope
-  [4] Export → Save report and exit
-  [5] Dig Deeper → Continue investigating
+```
+AskUserQuestion(
+  question: "Reframing complete (Surface Risk: {r}%). How would you like to proceed?",
+  options: [
+    "Systematic Debugging → Apply reframed understanding",
+    "Direct Fix → Implement the Context-level solution",
+    "Architecture Review → Evaluate design flaw scope",
+    "Export → Save report and exit",
+    "Dig Deeper → Continue investigating"
+  ]
+)
 ```
 
 ## All Other Behavior
