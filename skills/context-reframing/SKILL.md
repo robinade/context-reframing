@@ -64,7 +64,24 @@ See [references/question-patterns.md](references/question-patterns.md) for templ
 
 **Step B — Ask the question via AskUserQuestion**
 
-Use `AskUserQuestion` with contextually relevant clickable options (see "Interactive Questions" section below). Always include a free-text escape option.
+You MUST use the `AskUserQuestion` tool for every question. Never print questions as plain text — always provide clickable options. This is what makes the interview feel like a guided conversation instead of a wall of text.
+
+```
+AskUserQuestion(
+  question: "Round {n} | Targeting: {weakest_dimension} | Surface Risk: {score}%\n\n{your question}",
+  options: [
+    "{hypothesis-based option A}",
+    "{hypothesis-based option B}",
+    "{hypothesis-based option C}",
+    "다른 상황이에요 (직접 설명할게요)"
+  ]
+)
+```
+
+Rules for options:
+- 3-5 contextually specific options based on your hypothesis about the answer
+- Last option is always a free-text escape hatch ("다른 상황이에요" / "Something else")
+- Options should be specific, not generic ("좋아요"/"나빠요" is useless)
 
 **Step C — Score all 4 dimensions**
 
@@ -88,10 +105,10 @@ Round {n} complete.
 {r <= 20 ? "Threshold met. Ready to report." : "Next question targets: {weakest}"}
 ```
 
-**Step E — Check limits**
+**Step E — Check limits (also via AskUserQuestion)**
 
 - **Round 3+**: Allow early exit if user says "enough" / "let's go" / "그만"
-- **Round 10**: Soft warning: "10 rounds reached. Surface Risk: {r}%. Continue or proceed?"
+- **Round 10**: Use `AskUserQuestion(question: "10 rounds reached. Surface Risk: {r}%. Continue or proceed?", options: ["계속 질문받기", "이 정도면 충분해요, 진행하죠", "리포트만 저장하고 끝낼게요"])`
 - **Round 15**: Hard cap — proceed with current clarity
 
 ### Phase 3: Challenge Modes
@@ -176,41 +193,6 @@ Surface Risk = 1 - (voice × w_v + need × w_n + context × w_c + reframe × w_r
 **Universal weights**: Voice 20% / Need 25% / Context 35% / Reframe 20%
 
 Domain skills override these weights. See [references/scoring-engine.md](references/scoring-engine.md) for full rubrics and domain weight profiles.
-
-## Interactive Questions with AskUserQuestion
-
-Every question in the reframing loop MUST use the `AskUserQuestion` tool — never just print questions as plain text. This provides a clickable UI that makes the interview feel like a guided conversation, not a wall of text.
-
-**Why this matters:** Plain-text questions with (A)/(B)/(C) options require the user to type their choice. `AskUserQuestion` gives them clickable buttons, reducing friction and making the experience feel polished. Users engage more deeply when interaction is effortless.
-
-**How to format each question:**
-
-```
-AskUserQuestion(
-  question: "Round {n} | Targeting: {weakest_dimension} | Surface Risk: {score}%\n\n{your question}",
-  options: [
-    "Option A description",
-    "Option B description",
-    "Option C description",
-    "다른 상황이에요 (직접 설명할게요)"   // Always include a free-text escape hatch
-  ]
-)
-```
-
-**Rules:**
-- Provide 3-5 contextually relevant options based on your hypothesis about the answer
-- Always include one open-ended option ("다른 상황이에요" / "Something else") as the last choice so users aren't forced into your framing
-- Options should be specific enough to be useful, not generic ("좋아요" / "나빠요")
-- After scoring, display the CDS table as a normal text message (not inside AskUserQuestion)
-- The Execution Bridge (Phase 5) also uses `AskUserQuestion` with the next-step options
-
-**The early exit and hard cap prompts** should also use `AskUserQuestion`:
-```
-AskUserQuestion(
-  question: "10 rounds reached. Surface Risk: {r}%. Continue or proceed?",
-  options: ["계속 질문받기", "이 정도면 충분해요, 진행하죠", "리포트만 저장하고 끝낼게요"]
-)
-```
 
 ## Common Rules
 
