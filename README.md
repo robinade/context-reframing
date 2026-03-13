@@ -85,17 +85,26 @@ Fulfilling requests is "kindness". But solving the hidden context is "real impro
 
 ## Install / 설치
 
-```bash
-claude plugin install robinade/context-reframing
+In Claude Code, run these commands (type them in the chat, not a terminal):
+
+Claude Code 채팅창에서 다음 명령어를 입력하세요 (터미널이 아닌 채팅창):
+
+**Step 1**: Add the marketplace / 마켓플레이스 추가
+
+```
+/plugin marketplace add robinade/context-reframing
 ```
 
-Or register the marketplace and install:
+**Step 2**: Install the plugin / 플러그인 설치
 
-또는 마켓플레이스에 등록 후 설치:
+```
+/plugin install context-reframing@context-reframing
+```
+
+Or test locally without installing / 또는 설치 없이 로컬 테스트:
 
 ```bash
-claude marketplace register robinade/context-reframing
-claude plugin install context-reframing
+claude --plugin-dir ./context-reframing
 ```
 
 ---
